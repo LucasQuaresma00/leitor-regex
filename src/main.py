@@ -1,34 +1,18 @@
-# main.py
 """
 Módulo principal do sistema de processamento
 de arquivos com expressões regulares.
-
-Este módulo coordena todo o fluxo da aplicação:
-- leitura dos arquivos
-- identificação do tipo
-- extração de padrões
-- validação
-- geração de estatísticas
-- criação de relatórios
-- exportação dos resultados em JSON
 """
 
 import os
-
-from leitor import (
-    ler_arquivo,
-    contar_linhas,
-    identificar_tipo
-)
-
-from extrator import extrair_padroes
+from leitor import ler_arquivo, contar_linhas
+from processador import processar_arquivo
 from exportador import salvar_json
 from estatisticas import gerar_estatisticas
-from validador_csv import validar_csv
 from relatorio import gerar_relatorio
 
 
-PASTA_DADOS = "../dados"
+# Configurações
+PASTA_DADOS = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "dados")
 
 ARQUIVOS = [
     "01_atendimentos_bagunçados.txt",
@@ -38,222 +22,74 @@ ARQUIVOS = [
 ]
 
 
-def mostrar_amostra(linhas, quantidade=3):
-    """
-    Exibe uma pequena amostra do conteúdo
-    do arquivo no terminal.
-
-    Args:
-        linhas (list[str]):
-            Lista contendo as linhas do arquivo.
-
-        quantidade (int, optional):
-            Quantidade máxima de linhas exibidas.
-            Valor padrão: 3.
-
-    Returns:
-        None:
-            A função apenas imprime informações
-            no terminal.
-    """
-    print("\n--- AMOSTRA ---")
-
+def mostrar_amostra(linhas, quantidade=5):
+    print("\n--- AMOSTRA DO ARQUIVO ---")
     for linha in linhas[:quantidade]:
-        print(linha)
+        print(linha[:120])  # limita largura
+    print("-" * 60)
 
 
-def mostrar_resultados(resultados, limite=10):
-    """
-    Exibe os padrões encontrados durante
-    o processamento do arquivo.
-
-    Args:
-        resultados (list[dict]):
-            Lista contendo as ocorrências
-            identificadas.
-
-        limite (int, optional):
-            Quantidade máxima de resultados
-            exibidos no terminal.
-            Valor padrão: 10.
-
-    Returns:
-        None:
-            A função apenas imprime informações
-            no terminal.
-    """
-
-    print("\n--- PADRÕES ENCONTRADOS ---")
-
-    print(f"\nTotal de ocorrências: {len(resultados)}")
-    
-    for ocorrencia in resultados[:limite]:
-
-        print(
-            f"[{ocorrencia['tipo'].upper()}] "
-            f"{ocorrencia['valor']} "
-            f"-> {ocorrencia['classificacao']}"
-        )
+def mostrar_resumo(resultados, limite=8):
+    print(f"\n--- RESUMO DE OCORRÊNCIAS ({len(resultados)} encontradas) ---")
+    for occ in resultados[:limite]:
+        print(f"[{occ['tipo'].upper():12}] {occ['valor'][:80]:80} → {occ['classificacao']}")
+    if len(resultados) > limite:
+        print(f"... e mais {len(resultados) - limite} ocorrências")
 
 
 def main():
-    """
-    Executa o fluxo principal do sistema.
+    print("=" * 70)
+    print("🚀 PROCESSADOR DE ARQUIVOS COM REGEX - VERSÃO OTIMIZADA")
+    print("=" * 70)
 
-    O processamento realizado inclui:
-    - leitura dos arquivos
-    - identificação do tipo de conteúdo
-    - exibição de amostras
-    - extração de padrões utilizando regex
-    - validação estrutural de arquivos CSV
-    - geração de estatísticas
-    - geração de relatórios
-    - exportação dos resultados em JSON
-
-    Returns:
-        None:
-            A função executa o sistema completo
-            e exibe os resultados no terminal.
-    """
-    
-    print("=" * 60)
-    print("PROCESSADOR DE ARQUIVOS COM REGEX")
-    print("=" * 60)
     todos_resultados = []
 
     for nome_arquivo in ARQUIVOS:
-
         caminho = os.path.join(PASTA_DADOS, nome_arquivo)
 
-        linhas = ler_arquivo(caminho)
+        print(f"\n📄 Processando: {nome_arquivo}")
 
-        tipo = identificar_tipo(nome_arquivo)
+        # Processamento completo do arquivo
+        resultado_processamento = processar_arquivo(caminho, nome_arquivo)
 
-        print(f"\nArquivo: {nome_arquivo}")
-        print(f"Tipo: {tipo}")
-        print(f"Quantidade de linhas: {contar_linhas(linhas)}")
+        todos_resultados.extend(resultado_processamento["ocorrencias"])
 
-        # Mostrar amostra
-        mostrar_amostra(linhas)
+        # Exibição
+        mostrar_amostra(resultado_processamento["linhas"])
+        mostrar_resumo(resultado_processamento["ocorrencias"])
 
-        # Extrair padrões
-        resultados = extrair_padroes(linhas, nome_arquivo)
-        todos_resultados.extend(resultados)
-
-        # ======================================
-        # VALIDAR CSV
-        # ======================================
-
-        if tipo == "CSV":
-
-            inconsistencias_csv = validar_csv(
-                linhas,
-                nome_arquivo
-            )
-
-            resultados.extend(
-                inconsistencias_csv
-            )
-
-
-        # Mostrar resultados
-        mostrar_resultados(resultados)
-
-        # Estrutura JSON
-        estrutura_json = {
-            "arquivo": nome_arquivo,
-            "tipo": tipo,
-            "quantidade_linhas": contar_linhas(linhas),
-            "resultados": resultados
-        }
-
-        # Nome do arquivo de saída
+        # Salvar JSON individual
         nome_saida = nome_arquivo.split(".")[0]
+        salvar_json(nome_saida, resultado_processamento)
 
-        # Salvar JSON
-        salvar_json(nome_saida, estrutura_json)
+    # ====================== RELATÓRIOS GERAIS ======================
+    print("\n" + "=" * 70)
+    print("📊 GERANDO RELATÓRIOS GERAIS")
+    print("=" * 70)
 
-    print("\n" + "=" * 60)
-    print("ESTATÍSTICAS GERAIS")
-    print("=" * 60)
+    estatisticas = gerar_estatisticas(todos_resultados)
+    relatorio = gerar_relatorio(todos_resultados)
 
-    estatisticas = gerar_estatisticas(
-    todos_resultados
-    )
-
-    # ======================================
-    # RELATÓRIO
-    # ======================================
-
-    relatorio = gerar_relatorio(
-        todos_resultados
-    )
-
-    salvar_json(
-        "relatorio",
-        relatorio
-    )
-
-
-    # ======================================
-    # JSON GERAL
-    # ======================================
-
+    # JSON Final
     estrutura_geral = {
+        "resumo_execucao": {
+            "total_arquivos": len(ARQUIVOS),
+            "total_ocorrencias": len(todos_resultados)
+        },
         "estatisticas": estatisticas,
+        "relatorio": relatorio,
         "ocorrencias": todos_resultados
     }
 
-    salvar_json(
-        "resultados_gerais",
-        estrutura_geral
-    )
+    salvar_json("resultados_gerais", estrutura_geral)
 
-
-    # ======================================
-    # TOTAL POR TIPO
-    # ======================================
+    # Exibição final no terminal
+    print("\n✅ PROCESSAMENTO CONCLUÍDO COM SUCESSO!")
+    print(f"Total de ocorrências extraídas: {len(todos_resultados)}")
 
     print("\n--- TOTAL POR TIPO ---")
-
-    for tipo, total in estatisticas[
-        "total_por_tipo"
-    ].items():
-
-        print(f"{tipo.upper()}: {total}")
-
-    # ======================================
-    # VALIDOS / INVALIDOS
-    # ======================================
-
-    print("\n--- VÁLIDOS / INVÁLIDOS ---")
-
-    for tipo, dados in estatisticas[
-        "validos_invalidos"
-    ].items():
-
-        print(f"\n{tipo.upper()}")
-
-        for status, quantidade in dados.items():
-
-            print(f"  {status}: {quantidade}")
-
-    # ======================================
-    # DISTRIBUIÇÃO POR ARQUIVO
-    # ======================================
-
-    print("\n--- DISTRIBUIÇÃO POR ARQUIVO ---")
-
-    for arquivo, dados in estatisticas[
-        "distribuicao_arquivos"
-    ].items():
-
-        print(f"\n{arquivo}")
-
-        for tipo, quantidade in dados.items():
-
-            print(f"  {tipo}: {quantidade}")
-
+    for tipo, qtd in estatisticas["total_por_tipo"].items():
+        print(f"  {tipo.upper():15}: {qtd}")
 
 
 if __name__ == "__main__":

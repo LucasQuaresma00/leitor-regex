@@ -1,55 +1,30 @@
-# identificador.py
 """
-Módulo responsável pela identificação do tipo
-de conteúdo presente nos arquivos analisados.
-
-A identificação é feita com base em padrões
-textuais encontrados no conteúdo do arquivo.
+Módulo responsável pela identificação do tipo de conteúdo dos arquivos.
 """
 
 import re
 
 
-def identificar_tipo(conteudos):
+def identificar_tipo(linhas: list[str]) -> str:
     """
-    Identifica o tipo geral do arquivo com base
-    em padrões encontrados no conteúdo textual.
-
-    Regras utilizadas:
-    - Presença de ';' e cabeçalho típico -> CSV
-    - Presença de padrão de data de chat -> CHAT
-    - Presença de tags de log -> LOG
-    - Demais casos -> TEXTO LIVRE
-
-    Args:
-        conteudos (list[str]):
-            Lista contendo as linhas do arquivo.
-
-    Returns:
-        str:
-            Tipo identificado do arquivo.
-            Os valores possíveis são:
-            - CSV
-            - CHAT
-            - LOG
-            - TEXTO LIVRE
+    Identifica o tipo do arquivo com base no conteúdo.
+    Ordem de prioridade: CSV > LOG > CHAT > TEXTO LIVRE
     """
+    if not linhas:
+        return "TEXTO LIVRE"
 
-    texto_completo = "\n".join(conteudos)
+    texto = "\n".join(linhas).lower()
 
-    # CSV
-    if ";" in texto_completo and "id;nome;email" in texto_completo:
+    # ==================== CSV ====================
+    if ";" in texto and any(header in texto for header in ["id;nome", "email;", "cpf;", "telefone;"]):
         return "CSV"
 
-    # CHAT
-    padrao_chat = r"\[\d{2}/\d{2}/\d{4}"
-
-    if re.search(padrao_chat, texto_completo):
-        return "CHAT"
-
-    # LOG
-    if any(tag in texto_completo for tag in ["[INFO]", "[ERROR]", "[WARN]", "[DEBUG]"]):
+    # ==================== LOG ====================
+    if any(tag in texto for tag in ["[info]", "[error]", "[warn]", "[debug]", "[warn]", "session="]):
         return "LOG"
 
-    # TEXTO LIVRE
+    # ==================== CHAT ====================
+    if re.search(r"\[\d{2}/\d{2}/\d{4}", texto) or "]: " in texto or "@" in texto and "msg=" in texto:
+        return "CHAT"
+
     return "TEXTO LIVRE"

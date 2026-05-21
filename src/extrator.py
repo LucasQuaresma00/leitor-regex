@@ -1,213 +1,74 @@
-# extrator.py
 """
-Módulo responsável pela extração de padrões
-textuais presentes nos arquivos analisados.
-
-O módulo utiliza expressões regulares para
-identificar diferentes tipos de informações
-no conteúdo dos arquivos, como:
-- e-mails
-- telefones
-- CPF
-- URLs
-
-Após a extração, cada ocorrência é validada
-e estruturada em um formato padronizado.
+Módulo responsável pela extração de padrões textuais.
+Versão corrigida e completa.
 """
 
 import re
-
-from regex_patterns import *
-
+from regex_patterns import compilar_patterns
 from classificador import (
     validar_email,
     validar_telefone,
     validar_cpf,
-    validar_url
+    validar_url,
+    validar_data_hora,
+    validar_valor_monetario,
+    validar_nome_proprio
 )
 
 
-def criar_ocorrencia(
-tipo,
-    valor,
-    arquivo,
-    classificacao="não_aplicável"
-):
-    
-    """
-    Cria uma estrutura padronizada de ocorrência.
-
-    A função organiza os dados encontrados
-    durante a extração em um dicionário
-    estruturado, facilitando o processamento
-    e exportação das informações.
-
-    Args:
-        tipo (str):
-            Tipo da informação identificada.
-            Exemplo:
-            - email
-            - telefone
-            - cpf
-            - url
-
-        valor (str):
-            Valor encontrado no conteúdo analisado.
-
-        arquivo (str):
-            Nome do arquivo onde a ocorrência
-            foi identificada.
-
-        classificacao (str, optional):
-            Resultado da validação da ocorrência.
-            Valor padrão:
-            "não_aplicável".
-
-    Returns:
-        dict:
-            Estrutura contendo os dados
-            padronizados da ocorrência.
-    """
-
+def criar_ocorrencia(tipo: str, valor: str, arquivo: str, classificacao: str = "não_aplicável"):
     return {
         "tipo": tipo,
-        "valor": valor,
+        "valor": valor.strip(),
         "arquivo": arquivo,
         "classificacao": classificacao
     }
 
 
-def extrair_padroes(linhas, nome_arquivo):
-    """
-    Extrai padrões textuais de um conteúdo
-    utilizando expressões regulares.
-
-    A função realiza buscas por diferentes
-    tipos de informações no texto e valida
-    cada valor encontrado utilizando funções
-    específicas do módulo classificador.
-
-    Padrões analisados:
-    - e-mails
-    - telefones
-    - CPF
-    - URLs
-
-    Args:
-        linhas (list[str]):
-            Lista contendo as linhas do arquivo.
-
-        nome_arquivo (str):
-            Nome do arquivo analisado.
-
-    Returns:
-        list[dict]:
-            Lista contendo todas as ocorrências
-            identificadas no conteúdo.
-
-            Cada ocorrência possui:
-            - tipo
-            - valor
-            - arquivo
-            - classificacao
-    """
-    
+def extrair_padroes(linhas: list, nome_arquivo: str):
     resultados = []
-
     texto = "\n".join(linhas)
+    
+    patterns = compilar_patterns()
 
-    # ==========================================
-    # EMAILS
-    # ==========================================
+    # ==================== EMAIL ====================
+    for match in patterns["email_geral"].finditer(texto):
+        valor = match.group()
+        status = "valido" if validar_email(valor) else "invalido"
+        resultados.append(criar_ocorrencia("email", valor, nome_arquivo, status))
 
-    emails = re.findall(EMAIL_GERAL, texto)
+    # ==================== TELEFONE ====================
+    for match in patterns["telefone_geral"].finditer(texto):
+        valor = match.group()
+        status = "valido" if validar_telefone(valor) else "invalido"
+        resultados.append(criar_ocorrencia("telefone", valor, nome_arquivo, status))
 
-    for email in emails:
+    # ==================== CPF ====================
+    for match in patterns["cpf_geral"].finditer(texto):
+        valor = match.group()
+        status = "valido" if validar_cpf(valor) else "invalido"
+        resultados.append(criar_ocorrencia("cpf", valor, nome_arquivo, status))
 
-        status = (
-            "valido"
-            if validar_email(email)
-            else "invalido"
-        )
+    # ==================== URL ====================
+    for match in patterns["url_geral"].finditer(texto):
+        valor = match.group()
+        status = "valido" if validar_url(valor) else "invalido"
+        resultados.append(criar_ocorrencia("url", valor, nome_arquivo, status))
 
-        resultados.append(
-            criar_ocorrencia(
-                "email",
-                email,
-                nome_arquivo,
-                status
-            )
-        )
+    # ==================== OUTROS ====================
+    for match in patterns["data_hora"].finditer(texto):
+        valor = match.group()
+        status = "valido" if validar_data_hora(valor) else "invalido"
+        resultados.append(criar_ocorrencia("data_hora", valor, nome_arquivo, status))
 
-    # ==========================================
-    # TELEFONES
-    # ==========================================
+    for match in patterns["valor"].finditer(texto):
+        valor = match.group()
+        status = "valido" if validar_valor_monetario(valor) else "invalido"
+        resultados.append(criar_ocorrencia("valor_monetario", valor, nome_arquivo, status))
 
-    telefones = re.findall(TELEFONE_GERAL, texto)
-
-    for telefone in telefones:
-
-        telefone = telefone.strip()
-
-        status = (
-            "valido"
-            if validar_telefone(telefone)
-            else "invalido"
-        )
-
-        resultados.append(
-            criar_ocorrencia(
-                "telefone",
-                telefone,
-                nome_arquivo,
-                status
-            )
-        )
-
-    # ==========================================
-    # CPF
-    # ==========================================
-
-    cpfs = re.findall(CPF_GERAL, texto)
-
-    for cpf in cpfs:
-
-        status = (
-            "valido"
-            if validar_cpf(cpf)
-            else "invalido"
-        )
-
-        resultados.append(
-            criar_ocorrencia(
-                "cpf",
-                cpf,
-                nome_arquivo,
-                status
-            )
-        )
-
-    # ==========================================
-    # URL
-    # ==========================================
-
-    urls = re.findall(URL_GERAL, texto)
-
-    for url in urls:
-
-        status = (
-            "valido"
-            if validar_url(url)
-            else "invalido"
-        )
-
-        resultados.append(
-            criar_ocorrencia(
-                "url",
-                url,
-                nome_arquivo,
-                status
-            )
-        )
+    for match in patterns["nome"].finditer(texto):
+        valor = match.group()
+        status = "valido" if validar_nome_proprio(valor) else "invalido"
+        resultados.append(criar_ocorrencia("nome_proprio", valor, nome_arquivo, status))
 
     return resultados

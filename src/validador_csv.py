@@ -1,88 +1,42 @@
-# validador_csv.py
 """
-Módulo responsável pela validação estrutural
-de arquivos CSV.
-
-A validação verifica se todas as linhas do
-arquivo possuem a mesma quantidade de colunas
-definida no cabeçalho.
+Módulo responsável pela validação estrutural de arquivos CSV.
+Versão melhorada para arquivos sujos.
 """
 
-def validar_csv(linhas, nome_arquivo):
+def validar_csv(linhas: list[str], nome_arquivo: str):
     """
-    Valida a consistência estrutural de um arquivo CSV.
-
-    A função analisa se todas as linhas possuem
-    a mesma quantidade de colunas do cabeçalho.
-    Caso encontre divergências, registra as
-    inconsistências identificadas.
-
-    Regras de validação:
-    - Linhas vazias são ignoradas.
-    - O cabeçalho define a quantidade esperada
-      de colunas.
-    - Linhas com quantidade diferente de colunas
-      são classificadas como inválidas.
-
-    Args:
-        linhas (list[str]):
-            Lista contendo as linhas do arquivo CSV.
-
-        nome_arquivo (str):
-            Nome do arquivo analisado.
-
-    Returns:
-        list[dict]:
-            Lista contendo as inconsistências
-            encontradas durante a validação.
-
-            Cada inconsistência possui:
-            - tipo
-            - valor
-            - arquivo
-            - classificacao
-            - linha
-            - colunas_esperadas
-            - colunas_encontradas
+    Valida a estrutura do CSV e reporta inconsistências.
     """
     inconsistencias = []
+    linhas_validas = [linha.strip() for linha in linhas if linha.strip()]
 
-    # Remove linhas vazias
-    linhas = [
-        linha for linha in linhas
-        if linha.strip()
-    ]
-
-    if not linhas:
+    if not linhas_validas:
         return inconsistencias
 
     # Cabeçalho
-    cabecalho = linhas[0]
+    cabecalho = linhas_validas[0]
+    colunas_esperadas = len(cabecalho.split(";"))
 
-    quantidade_esperada = len(
-        cabecalho.split(";")
-    )
+    print(f"   Cabeçalho tem {colunas_esperadas} colunas")
 
-    # Verificar linhas
-    for numero_linha, linha in enumerate(
-        linhas[1:],
-        start=2
-    ):
+    for num_linha, linha in enumerate(linhas_validas[1:], start=2):
+        colunas_encontradas = len(linha.split(";"))
 
-        quantidade_colunas = len(
-            linha.split(";")
-        )
-
-        if quantidade_colunas != quantidade_esperada:
+        if colunas_encontradas != colunas_esperadas:
+            valor_truncado = linha[:120] + "..." if len(linha) > 120 else linha
 
             inconsistencias.append({
                 "tipo": "csv_inconsistente",
-                "valor": linha,
+                "valor": valor_truncado,
                 "arquivo": nome_arquivo,
                 "classificacao": "invalido",
-                "linha": numero_linha,
-                "colunas_esperadas": quantidade_esperada,
-                "colunas_encontradas": quantidade_colunas
+                "linha": num_linha,
+                "colunas_esperadas": colunas_esperadas,
+                "colunas_encontradas": colunas_encontradas,
+                "descricao": f"Esperado {colunas_esperadas} colunas, encontrado {colunas_encontradas}"
             })
+
+    total_linhas = len(linhas_validas) - 1  # menos o cabeçalho
+    print(f"   Total de linhas analisadas: {total_linhas} | Inconsistências: {len(inconsistencias)}")
 
     return inconsistencias

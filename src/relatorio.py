@@ -1,87 +1,31 @@
-# relatorio.py
-
 """
-Módulo responsável pela geração de relatórios
-estatísticos com base nas ocorrências encontradas
-durante o processamento dos arquivos.
-
-O relatório organiza os dados por arquivo e
-tipo de ocorrência, contabilizando registros
-totais, válidos e inválidos.
+Módulo responsável pela geração de relatórios por arquivo.
 """
 
 from collections import defaultdict
 
 
-def gerar_relatorio(resultados):
+def gerar_relatorio(resultados: list[dict]) -> dict:
     """
-    Gera um relatório consolidado das ocorrências
-    identificadas no sistema.
-
-    A função percorre a lista de resultados
-    processados e agrupa as informações por:
-    - arquivo
-    - tipo de ocorrência
-
-    Para cada grupo são contabilizados:
-    - total de ocorrências
-    - quantidade de válidos
-    - quantidade de inválidos
-
-    Args:
-        resultados (list[dict]):
-            Lista contendo as ocorrências geradas
-            durante as validações e inspeções.
-
-            Cada ocorrência deve possuir:
-            - arquivo
-            - tipo
-            - classificacao
-
-    Returns:
-        dict:
-            Estrutura organizada contendo o resumo
-            estatístico das ocorrências por arquivo.
-
-            Exemplo:
-            {
-                "arquivo.csv": {
-                    "email": {
-                        "total": 10,
-                        "validos": 8,
-                        "invalidos": 2
-                    }
-                }
-            }
+    Gera um relatório consolidado por arquivo e por tipo.
     """
-    
     relatorio = defaultdict(
         lambda: defaultdict(
-            lambda: {
-                "total": 0,
-                "validos": 0,
-                "invalidos": 0
-            }
+            lambda: {"total": 0, "valido": 0, "invalido": 0, "não_aplicável": 0}
         )
     )
 
-    for ocorrencia in resultados:
-
-        arquivo = ocorrencia["arquivo"]
-
-        tipo = ocorrencia["tipo"]
-
-        classificacao = ocorrencia["classificacao"]
+    for occ in resultados:
+        arquivo = occ["arquivo"]
+        tipo = occ["tipo"]
+        status = occ.get("classificacao", "não_aplicável")
 
         relatorio[arquivo][tipo]["total"] += 1
+        if status in relatorio[arquivo][tipo]:
+            relatorio[arquivo][tipo][status] += 1
 
-        if classificacao == "valido":
-            relatorio[arquivo][tipo]["validos"] += 1
-
-        elif classificacao == "invalido":
-            relatorio[arquivo][tipo]["invalidos"] += 1
-
+    # Converte defaultdict para dict normal
     return {
-        arquivo: dict(tipos)
+        arquivo: dict(tipos) 
         for arquivo, tipos in relatorio.items()
     }

@@ -1,121 +1,43 @@
-# classificador.py
-
 """
-Módulo responsável pela validação de padrões
-textuais identificados durante a inspeção
-dos arquivos.
-
-O módulo utiliza expressões regulares para
-verificar se os dados encontrados seguem
-formatos considerados válidos.
-
-Tipos suportados:
-- e-mail
-- telefone
-- CPF
-- URL
+Módulo responsável pela validação dos padrões extraídos.
 """
 
 import re
-
 from regex_patterns import (
     EMAIL_VALIDO,
     TELEFONE_VALIDO,
     CPF_VALIDO,
-    URL_VALIDA
+    URL_VALIDA,
+    DATA_HORA,
+    VALOR,
+    NOME
 )
 
 
-def validar_email(email):
-    """
-    Valida o formato de um endereço de e-mail.
-
-    A validação é realizada utilizando uma
-    expressão regular definida no módulo
-    regex_patterns.
-
-    Args:
-        email (str):
-            Endereço de e-mail que será validado.
-
-    Returns:
-        bool:
-            True caso o e-mail seja válido.
-            False caso o formato seja inválido.
-    """
-
-    return bool(
-        re.fullmatch(EMAIL_VALIDO, email)
-    )
+def validar_email(email: str) -> bool:
+    return bool(re.fullmatch(EMAIL_VALIDO, email.strip()))
 
 
-def validar_telefone(telefone):
-    """
-    Valida o formato de um número de telefone.
-
-    A validação considera o padrão definido
-    pela expressão regular TELEFONE_VALIDO.
-
-    Args:
-        telefone (str):
-            Número de telefone que será validado.
-
-    Returns:
-        bool:
-            True caso o telefone seja válido.
-            False caso o formato seja inválido.
-    """
-    return bool(
-        re.fullmatch(TELEFONE_VALIDO, telefone)
-    )
+def validar_telefone(telefone: str) -> bool:
+    return bool(re.fullmatch(TELEFONE_VALIDO, telefone.strip()))
 
 
-def validar_cpf(cpf):
-    """
-    Valida o formato de um CPF.
-
-    A verificação é realizada utilizando uma
-    expressão regular definida no módulo
-    regex_patterns.
-
-    Observação:
-        Esta validação verifica apenas o
-        formato textual do CPF, não os
-        dígitos verificadores oficiais.
-
-    Args:
-        cpf (str):
-            CPF que será validado.
-
-    Returns:
-        bool:
-            True caso o CPF possua formato válido.
-            False caso o formato seja inválido.
-    """
-    return bool(
-        re.fullmatch(CPF_VALIDO, cpf)
-    )
+def validar_cpf(cpf: str) -> bool:
+    return bool(re.fullmatch(CPF_VALIDO, cpf.strip()))
 
 
-def validar_url(url):
-    # Essa bomba esta considerando tudo invalido lembrar de trocar o regex
-    """
-    Valida o formato de uma URL.
+def validar_url(url: str) -> bool:
+    return bool(re.fullmatch(URL_VALIDA, url.strip()))
 
-    A validação é baseada em uma expressão
-    regular definida no módulo regex_patterns.
 
-    Args:
-        url (str):
-            URL que será validada.
+# === Novos validadores ===
+def validar_data_hora(valor: str) -> bool:
+    return bool(re.fullmatch(DATA_HORA, valor.strip()))
 
-    Returns:
-        bool:
-            True caso a URL seja válida.
-            False caso o formato seja inválido.
-    """
 
-    return bool(
-        re.fullmatch(URL_VALIDA, url)
-    )
+def validar_valor_monetario(valor: str) -> bool:
+    return bool(re.fullmatch(VALOR, valor.strip()))
 
+
+def validar_nome_proprio(nome: str) -> bool:
+    return bool(re.fullmatch(NOME, nome.strip()))

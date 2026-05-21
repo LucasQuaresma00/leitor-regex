@@ -1,87 +1,47 @@
-# regex_patterns.py
 """
-Módulo responsável pelo armazenamento centralizado
-das expressões regulares utilizadas no sistema.
-
-Os padrões definidos neste arquivo são utilizados
-pelos módulos de:
-- extração
-- validação
-- identificação de conteúdo
-
-A separação das regex em um módulo específico
-facilita:
-- manutenção
-- reutilização
-- organização do projeto
-- atualização dos padrões
+Módulo central de padrões regex.
+Separação clara: GERAL (extração ampla) × VALIDO (validação rigorosa)
 """
 
+import re
 
-# ==================================================
-# EMAILS
-# ==================================================
+# ==================== EMAILS ====================
+EMAIL_GERAL = r'[a-zA-Z0-9._%+-]+@[^\s<>"\']+'
+EMAIL_VALIDO = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
 
-# EMAIL_GERAL = r'\S+@\S+'
-EMAIL_GERAL = (
-    r'[a-zA-Z0-9._%+-]+'
-    r'@[^\s]+'
-)
+# ==================== TELEFONES ====================
+TELEFONE_GERAL = r'(?![\n])[\(\)\d\s-]{8,}'
+TELEFONE_VALIDO = r'^(?:\(\d{2}\)\s?|\d{2}\s?)9\d{4}-?\d{4}$'
+# ==================== CPF ====================
+CPF_GERAL = r'\d{3}[\s.-]?\d{3}[\s.-]?\d{3}[\s.-]?\d{2}'
+CPF_VALIDO = r'^\d{3}\.\d{3}\.\d{3}-\d{2}$'
 
-EMAIL_VALIDO = (
-    r'[a-zA-Z0-9._%+-]+'
-    r'@'
-    r'(?:[a-zA-Z0-9-]+\.)+'
-    r'[a-zA-Z]{2,}'
-)
+# ==================== URL ====================
+URL_GERAL = r'https?://[^\s<>"]+|www\.[^\s<>"]+[^\s<>"]*'
+URL_VALIDA = r'^(https?://)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(/[^\s<>"]*)?$'
 
+# ==================== OUTROS ====================
+DATA = r'\b\d{2}[/.-]\d{2}[/.-]\d{4}\b'
+HORARIO = r'\b\d{1,2}:\d{2}(?::\d{2})?\b'
+DATA_HORA = r'\b\d{2}[/.-]\d{2}[/.-]\d{4}\s+\d{1,2}:\d{2}(?::\d{2})?\b'
+VALOR = r'R\$\s?\d{1,3}(?:\.\d{3})*(?:,\d{2})?'
 
-# ==================================================
-# TELEFONES
-# ==================================================
-
-TELEFONE_GERAL = r'[\(\)\d\s-]{8,}'
-
-TELEFONE_VALIDO = (
-    r'(?:\(\d{2}\)\s?|\d{2}\s?)'
-    r'9?\d{4,5}-?\d{4}'
-)
+NOME = r'\b[A-ZÁÀÂÃÉÊÍÓÔÕÚÇ][a-záàâãéêíóôõúç]+(?:\s[A-ZÁÀÂÃÉÊÍÓÔÕÚÇ][a-záàâãéêíóôõúç]+){1,4}\b'
 
 
-# ==================================================
-# CPF
-# ==================================================
-
-CPF_GERAL = r'[\d.-]{11,14}'
-
-CPF_VALIDO = r'\d{3}\.\d{3}\.\d{3}-\d{2}'
-
-
-# ==================================================
-# URL
-# ==================================================
-
-URL_GERAL = r'\S+\.\S+'
-
-URL_VALIDA = r'(https?:\/\/)?(www\.)?[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}(\S*)?'
-
-# ==================================================
-# OUTROS PADRÕES
-# ==================================================
-# Expressões auxiliares utilizadas para
-# identificação de dados adicionais.
-
-DATA = r'\b\d{2}/\d{2}/\d{4}\b'
-
-HORARIO = r'\b\d{2}:\d{2}:\d{2}\b'
-
-DATA_HORA = r'\b\d{2}/\d{2}/\d{4}\s\d{2}:\d{2}:\d{2}\b'
-
-VALOR = r'R\$\s?\d{1,3}(?:\.\d{3})*,\d{2}'
-
-NOME = (
-    r'\b[A-ZÁÀÂÃÉÊÍÓÔÕÚÇ]'
-    r'[a-záàâãéêíóôõúç]+'
-    r'(?:\s[A-ZÁÀÂÃÉÊÍÓÔÕÚÇ]'
-    r'[a-záàâãéêíóôõúç]+)+'
-)
+def compilar_patterns():
+    """Compila todas as regex para melhor performance."""
+    return {
+        "email_geral": re.compile(EMAIL_GERAL, re.IGNORECASE),
+        "email_valido": re.compile(EMAIL_VALIDO, re.IGNORECASE),
+        "telefone_geral": re.compile(TELEFONE_GERAL),
+        "telefone_valido": re.compile(TELEFONE_VALIDO),
+        "cpf_geral": re.compile(CPF_GERAL),
+        "cpf_valido": re.compile(CPF_VALIDO),
+        "url_geral": re.compile(URL_GERAL, re.IGNORECASE),
+        "url_valida": re.compile(URL_VALIDA, re.IGNORECASE),
+        "data": re.compile(DATA),
+        "data_hora": re.compile(DATA_HORA),
+        "valor": re.compile(VALOR),
+        "nome": re.compile(NOME),
+    }

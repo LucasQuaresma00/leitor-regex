@@ -1,60 +1,42 @@
-# exportador.py
 """
-Módulo responsável pela exportação dos dados
-processados pelo sistema.
-
-Atualmente, o módulo realiza a conversão e
-armazenamento das informações no formato JSON.
+Módulo responsável pela exportação dos resultados em JSON.
 """
 
 import json
 import os
 
 
-def salvar_json(nome_arquivo, dados):
-    #Nota: Quero trocar essa parte de criar automaticamente e ja deixar
-    #a pasta saida para remover o s.makedirs(pasta_saida, exist_ok=True)
+# Configuração centralizada da pasta de saída
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+PASTA_SAIDA = os.path.join(BASE_DIR, "saida")
+
+
+def garantir_pasta_saida():
+    """Cria a pasta de saída se ela não existir."""
+    os.makedirs(PASTA_SAIDA, exist_ok=True)
+
+
+def salvar_json(nome_arquivo: str, dados: dict | list):
     """
-    Salva os dados processados em um arquivo JSON.
-
-    A função cria automaticamente a pasta de saída
-    caso ela não exista, gera o caminho do arquivo
-    e realiza a serialização dos dados utilizando
-    o módulo json.
-
-    O arquivo é salvo com indentação para facilitar
-    a leitura humana e utilizando codificação UTF-8.
-
+    Salva os dados em formato JSON na pasta 'saida'.
+    
     Args:
-        nome_arquivo (str):
-            Nome utilizado na criação do arquivo JSON.
-
-        dados (dict | list):
-            Estrutura de dados que será convertida
-            para JSON.
-
-    Returns:
-        None:
-            A função apenas salva o arquivo e exibe
-            uma mensagem de confirmação no terminal.
+        nome_arquivo (str): Nome do arquivo (sem .json)
+        dados (dict | list): Dados a serem salvos
     """
+    garantir_pasta_saida()
 
-    pasta_saida = "../saida"
+    caminho_completo = os.path.join(PASTA_SAIDA, f"{nome_arquivo}.json")
 
-    # os.makedirs(pasta_saida, exist_ok=True)
+    try:
+        with open(caminho_completo, "w", encoding="utf-8") as arquivo:
+            json.dump(dados, arquivo, indent=4, ensure_ascii=False)
+        
+        print(f"✅ [JSON SALVO] {nome_arquivo}.json")
+    except Exception as e:
+        print(f"❌ Erro ao salvar {nome_arquivo}.json: {e}")
 
-    caminho_saida = os.path.join(
-        pasta_saida,
-        f"{nome_arquivo}.json"
-    )
 
-    with open(caminho_saida, "w", encoding="utf-8") as arquivo:
-
-        json.dump(
-            dados,
-            arquivo,
-            indent=4,
-            ensure_ascii=False
-        )
-
-    print(f"\n[JSON SALVO] {caminho_saida}")
+def salvar_csv(nome_arquivo: str, dados: list[dict]):
+    """Futuro: Função para salvar em CSV (opcional)."""
+    pass
