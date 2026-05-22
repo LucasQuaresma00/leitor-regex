@@ -11,6 +11,8 @@ from classificador import (
     validar_cpf,
     validar_url,
     validar_data_hora,
+    validar_data,
+    validar_horario,
     validar_valor_monetario,
     validar_nome_proprio
 )
@@ -56,6 +58,16 @@ def extrair_padroes(linhas: list, nome_arquivo: str):
         resultados.append(criar_ocorrencia("url", valor, nome_arquivo, status))
 
     # ==================== OUTROS ====================
+    for match in patterns["data"].finditer(texto):
+        valor = match.group()
+        status = "valido" if validar_data(valor) else "invalido"
+        resultados.append(criar_ocorrencia("data", valor, nome_arquivo, status))
+
+    for match in patterns["horario"].finditer(texto):
+        valor = match.group()
+        status = "valido" if validar_horario(valor) else "invalido"
+        resultados.append(criar_ocorrencia("horario", valor, nome_arquivo, status))
+
     for match in patterns["data_hora"].finditer(texto):
         valor = match.group()
         status = "valido" if validar_data_hora(valor) else "invalido"
