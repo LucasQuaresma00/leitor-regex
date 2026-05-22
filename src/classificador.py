@@ -9,6 +9,8 @@ from regex_patterns import (
     CPF_VALIDO,
     URL_VALIDA,
     DATA_HORA,
+    DATA_VALIDA,
+    HORARIO_VALIDO,
     VALOR,
     NOME
 )
@@ -33,6 +35,14 @@ def validar_url(url: str) -> bool:
 # === Novos validadores ===
 def validar_data_hora(valor: str) -> bool:
     return bool(re.fullmatch(DATA_HORA, valor.strip()))
+
+
+def validar_data(valor: str) -> bool:
+    return bool(re.fullmatch(DATA_VALIDA, valor.strip()))
+
+
+def validar_horario(valor: str) -> bool:
+    return bool(re.fullmatch(HORARIO_VALIDO, valor.strip()))
 
 
 def validar_valor_monetario(valor: str) -> bool:
