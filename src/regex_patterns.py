@@ -22,7 +22,11 @@ URL_VALIDA = r'^(https?://)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(/[^\s<>"]*)?$'
 
 # ==================== OUTROS ====================
 DATA = r'\b\d{2}[/.-]\d{2}[/.-]\d{4}\b'
+DATA_VALIDA = r'^(?:(?:31([/.-])(?:0?[13578]|1[02]))\1|(?:(?:29|30)([/.-])(?:0?[1,3-9]|1[0-2])\2))(?:1[6-9]|[2-9]\d)?\d{2}$|^(?:29([/.-])0?2\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\d|2[0-8])([/.-])(?:(?:0?[1-9])|(?:1[0-2]))\4(?:1[6-9]|[2-9]\d)?\d{2}$'
+
 HORARIO = r'\b\d{1,2}:\d{2}(?::\d{2})?\b'
+HORARIO_VALIDO = r'^(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d)?$'
+
 DATA_HORA = r'\b\d{2}[/.-]\d{2}[/.-]\d{4}\s+\d{1,2}:\d{2}(?::\d{2})?\b'
 VALOR = r'R\$\s?\d{1,3}(?:\.\d{3})*(?:,\d{2})?'
 
@@ -41,6 +45,9 @@ def compilar_patterns():
         "url_geral": re.compile(URL_GERAL, re.IGNORECASE),
         "url_valida": re.compile(URL_VALIDA, re.IGNORECASE),
         "data": re.compile(DATA),
+        "data_valida": re.compile(DATA_VALIDA),
+        "horario": re.compile(HORARIO),
+        "horario_valido": re.compile(HORARIO_VALIDO),
         "data_hora": re.compile(DATA_HORA),
         "valor": re.compile(VALOR),
         "nome": re.compile(NOME),
