@@ -1,87 +1,32 @@
-import {
-    renderTable
-} from "./table.js";
+import { renderTable } from "./table.js";
 
 export function initializeFilters(data) {
+    const searchInput  = document.getElementById("search-input");
+    const typeFilter   = document.getElementById("type-filter");
+    const statusFilter = document.getElementById("status-filter");
 
-    const typeFilter = document.getElementById(
-        "type-filter"
-    );
-
-    const searchInput = document.getElementById(
-        "search-input"
-    );
-
-    const statusFilter = document.getElementById(
-        "status-filter"
-    );
-
-    const types = [
-        ...new Set(
-            data.map(item => item.tipo)
-        )
-    ];
-
-    types.forEach(type => {
-
-        const option =
-            document.createElement("option");
-
-        option.value = type;
-
-        option.textContent = type;
-
-        typeFilter.appendChild(option);
+    // Popula o select de tipos dinamicamente
+    [...new Set(data.map(d => d.tipo))].forEach(tipo => {
+        const opt = document.createElement("option");
+        opt.value = opt.textContent = tipo;
+        typeFilter.appendChild(opt);
     });
 
     function applyFilters() {
+        const search = searchInput.value.toLowerCase();
+        const type   = typeFilter.value;
+        const status = statusFilter.value;
 
-        const search =
-            searchInput.value.toLowerCase();
-
-        const type =
-            typeFilter.value;
-
-        const status =
-            statusFilter.value;
-
-        const filtered = data.filter(item => {
-
-            const matchesSearch =
-                item.valor_normalizado
-                    .toLowerCase()
-                    .includes(search);
-
-            const matchesType =
-                !type ||
-                item.tipo === type;
-
-            const matchesStatus =
-                !status ||
-                item.status_final === status;
-
-            return (
-                matchesSearch &&
-                matchesType &&
-                matchesStatus
-            );
-        });
+        const filtered = data.filter(item =>
+            item.valor_normalizado.toLowerCase().includes(search) &&
+            (!type   || item.tipo        === type)   &&
+            (!status || item.status_final === status)
+        );
 
         renderTable(filtered);
     }
 
-    searchInput.addEventListener(
-        "input",
-        applyFilters
-    );
-
-    typeFilter.addEventListener(
-        "change",
-        applyFilters
-    );
-
-    statusFilter.addEventListener(
-        "change",
-        applyFilters
-    );
+    searchInput.addEventListener("input",  applyFilters);
+    typeFilter.addEventListener("change",  applyFilters);
+    statusFilter.addEventListener("change", applyFilters);
 }

@@ -1,171 +1,76 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
-
     <meta charset="UTF-8" />
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    />
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Dashboard Regex</title>
-
     <link rel="stylesheet" href="style.css" />
-
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
 </head>
-
 <body>
 
-    <!-- ===================================== -->
-    <!-- HEADER -->
-    <!-- ===================================== -->
-
     <header class="header">
-
-        <h1>
-            Sistema de Análise Regex
-        </h1>
-
-        <p>
-            Dashboard de análise de ocorrências
-        </p>
-
+        <h1>Sistema de Análise Regex</h1>
+        <p>Dashboard de análise de ocorrências</p>
     </header>
 
-    <!-- ===================================== -->
-    <!-- CARDS -->
-    <!-- ===================================== -->
-
     <section class="cards">
-
         <div class="card">
             <h3>Total</h3>
             <p id="total-occurrences">0</p>
         </div>
-
         <div class="card">
             <h3>Válidos</h3>
             <p id="valid-count">0</p>
         </div>
-
         <div class="card">
             <h3>Inválidos</h3>
             <p id="invalid-count">0</p>
         </div>
-
         <div class="card">
             <h3>Inconsistência</h3>
             <p id="inconsistency-rate">0%</p>
         </div>
-
     </section>
-
-    <!-- ===================================== -->
-    <!-- GRÁFICOS -->
-    <!-- ===================================== -->
 
     <section class="charts">
-
         <div class="chart-container">
-
-            <h2>
-                Ocorrências por Tipo
-            </h2>
-
+            <h2>Ocorrências por Tipo</h2>
             <canvas id="typeChart"></canvas>
-
         </div>
-
         <div class="chart-container">
-
-            <h2>
-                Válidos vs Inválidos
-            </h2>
-
+            <h2>Válidos vs Inválidos</h2>
             <canvas id="statusChart"></canvas>
-
         </div>
-
     </section>
-
-    <!-- ===================================== -->
-    <!-- FILTROS -->
-    <!-- ===================================== -->
 
     <section class="filters">
-
-        <input
-            type="text"
-            id="search-input"
-            placeholder="Buscar valor..."
-        />
-
+        <input type="text" id="search-input" placeholder="Buscar valor..." />
         <select id="type-filter">
-
-            <option value="">
-                Todos os tipos
-            </option>
-
+            <option value="">Todos os tipos</option>
         </select>
-
         <select id="status-filter">
-
-            <option value="">
-                Todos status
-            </option>
-
-            <option value="valido">
-                Válido
-            </option>
-
-            <option value="invalido">
-                Inválido
-            </option>
-
+            <option value="">Todos status</option>
+            <option value="valido">Válido</option>
+            <option value="invalido">Inválido</option>
         </select>
-
     </section>
 
-    <!-- ===================================== -->
-    <!-- TABELA -->
-    <!-- ===================================== -->
-
     <section class="table-section">
-
         <table>
-
             <thead>
-
                 <tr>
-
                     <th>Tipo</th>
-
                     <th>Valor</th>
-
                     <th>Arquivo</th>
-
                     <th>Status</th>
-
                     <th>Confiança</th>
-
                 </tr>
-
             </thead>
-
-            <tbody id="occurrences-table">
-
-            </tbody>
-
+            <tbody id="occurrences-table"></tbody>
         </table>
-
     </section>
 
     <script type="module" src="app.js"></script>
-
 </body>
-
 </html>
