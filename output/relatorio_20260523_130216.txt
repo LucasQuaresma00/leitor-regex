@@ -1,0 +1,261 @@
+╔════════════════════════════════════════════════════════════╗
+║          SISTEMA DE ANÁLISE REGEX — RELATÓRIO            ║
+╚════════════════════════════════════════════════════════════╝
+
+Gerado em: 23/05/2026 13:02:19
+
+──────────────────────────────────────────────────────────────────────
+1. ARQUIVOS PROCESSADOS
+──────────────────────────────────────────────────────────────────────
+Arquivo: 01_atendimentos_bagunçados.txt
+Tipo detectado: chat
+Encoding: utf-8
+Linhas: 4921
+Linhas vazias: 346
+Caracteres: 573898
+
+Arquivo: 02_logs_mistos.log
+Tipo detectado: chat
+Encoding: utf-8
+Linhas: 8000
+Linhas vazias: 0
+Caracteres: 1450899
+
+Arquivo: 03_mensagens_chat.txt
+Tipo detectado: chat
+Encoding: utf-8
+Linhas: 3239
+Linhas vazias: 0
+Caracteres: 488898
+
+Arquivo: 04_exportacao_suja.csv
+Tipo detectado: csv
+Encoding: utf-8
+Linhas: 5001
+Linhas vazias: 0
+Caracteres: 685767
+Inconsistências:
+  - CSV com número variável de colunas: [7, 8]
+
+──────────────────────────────────────────────────────────────────────
+2. ESTATÍSTICAS GERAIS
+──────────────────────────────────────────────────────────────────────
+Total de ocorrências: 59793
+Linhas processadas: 21161
+Taxa de inconsistência: 15.67%
+Taxa estrutural válida: 84.33%
+Taxa semântica válida: 85.71%
+Confiança média: 0.93
+
+──────────────────────────────────────────────────────────────────────
+3. OCORRÊNCIAS POR TIPO
+──────────────────────────────────────────────────────────────────────
+cpf
+  Total: 8635
+  Estruturalmente válidos: 92
+  Estruturalmente inválidos: 8543
+  Semânticamente inválidos: 8543
+
+datetime
+  Total: 6683
+  Estruturalmente válidos: 6683
+  Estruturalmente inválidos: 0
+  Semânticamente inválidos: 0
+
+email
+  Total: 14662
+  Estruturalmente válidos: 13957
+  Estruturalmente inválidos: 705
+  Semânticamente inválidos: 0
+
+ip
+  Total: 2460
+  Estruturalmente válidos: 2460
+  Estruturalmente inválidos: 0
+  Semânticamente inválidos: 0
+
+nome_proprio
+  Total: 10605
+  Estruturalmente válidos: 10605
+  Estruturalmente inválidos: 0
+  Semânticamente inválidos: 0
+
+session_id
+  Total: 2460
+  Estruturalmente válidos: 2460
+  Estruturalmente inválidos: 0
+  Semânticamente inválidos: 0
+
+telefone
+  Total: 11564
+  Estruturalmente válidos: 11564
+  Estruturalmente inválidos: 0
+  Semânticamente inválidos: 0
+
+url
+  Total: 2724
+  Estruturalmente válidos: 2603
+  Estruturalmente inválidos: 121
+  Semânticamente inválidos: 0
+
+──────────────────────────────────────────────────────────────────────
+4. DISTRIBUIÇÃO CONTEXTUAL
+──────────────────────────────────────────────────────────────────────
+contato: 20444
+texto_livre: 13326
+log: 12270
+cliente: 10086
+acesso: 3667
+
+──────────────────────────────────────────────────────────────────────
+5. DISTRIBUIÇÃO POR ARQUIVO
+──────────────────────────────────────────────────────────────────────
+01_atendimentos_bagunçados.txt
+  cpf: 885
+  datetime: 1005
+  email: 2459
+  ip: 904
+  nome_proprio: 2384
+  session_id: 904
+  telefone: 1559
+  url: 833
+
+02_logs_mistos.log
+  cpf: 2878
+  datetime: 3613
+  email: 5893
+  ip: 923
+  nome_proprio: 4847
+  session_id: 923
+  telefone: 4357
+  url: 1357
+
+03_mensagens_chat.txt
+  cpf: 603
+  datetime: 2065
+  email: 1775
+  ip: 633
+  nome_proprio: 3374
+  session_id: 633
+  telefone: 1126
+  url: 534
+
+04_exportacao_suja.csv
+  cpf: 4269
+  email: 4535
+  telefone: 4522
+
+──────────────────────────────────────────────────────────────────────
+6. TOP VALORES
+──────────────────────────────────────────────────────────────────────
+email
+  1x -> bitbh@gov.br
+  1x -> xg1go@ufpa.br
+  1x -> 975lc7@hotmail.com
+  1x -> 6cjzi@outlook.com
+  1x -> 93k013zsh@ufpa.br
+  1x -> axvdut@outlook.com
+  1x -> dqka3@empresa.com.br
+  1x -> bwn3q_e8h@gmail.com
+  1x -> 0cpuphp@gmail.com
+  1x -> jdau_ny3y2@ufpa.br
+
+nome_proprio
+  472x -> Castelo Branco
+  472x -> Rua Augusto Corrêa
+  439x -> Almirante Barroso
+  414x -> São Pedro
+  75x -> Igor Cardoso
+  53x -> Natália Mendes
+  51x -> Quésia Cardoso
+  49x -> Eduardo Tavares
+  48x -> Carlos Cardoso
+  47x -> Patrícia Almeida
+
+cpf
+  1x -> 30086875935
+  1x -> 80765261449
+  1x -> 44476904382
+  1x -> 76960826911
+  1x -> 84869598675
+  1x -> 25450907620
+  1x -> 16413023566
+  1x -> 44046319080
+  1x -> 33085416072
+  1x -> 76063353289
+
+ip
+  1x -> 176.166.28.59
+  1x -> 22.248.35.251
+  1x -> 248.29.31.192
+  1x -> 215.10.78.62
+  1x -> 211.250.54.111
+  1x -> 196.137.20.196
+  1x -> 164.130.235.66
+  1x -> 61.69.198.117
+  1x -> 13.170.124.254
+  1x -> 191.32.243.115
+
+session_id
+  1x -> session=RcoreogrNwwm
+  1x -> session=FgM0Fmxk754L
+  1x -> session=d9Z850kEnydx
+  1x -> session=byIbNiCdxnuV
+  1x -> session=4x6mKZpRsQXX
+  1x -> session=XmhnjqidXKZ5
+  1x -> session=MoQrof8VRgks
+  1x -> session=CPPKY6gob2I4
+  1x -> session=KT2OZM6rQnBo
+  1x -> session=KYoWWKr99HXg
+
+url
+  335x -> https://loja.exemplo.com/produto
+  322x -> http://sigaa.ufpa.br
+  321x -> https://api.servico.gov.br/v1/status
+  313x -> https://portal.exemplo.com.br
+  304x -> https://ufpa.br
+  121x -> www.semprotocolo.com
+  59x -> https://portal.exemplo.com.br/contato
+  59x -> https://api.servico.gov.br/v1/status?page=2&order=desc
+  58x -> https://ufpa.br?page=2&order=desc
+  56x -> https://loja.exemplo.com/produto?id=123
+
+datetime
+  1x -> 16/01/2025 15:37:21
+  1x -> 08/01/2022 11:23:36
+  1x -> 28/08/2024 07:13:13
+  1x -> 06/01/2023 12:24:52
+  1x -> 02/12/2021 20:11:38
+  1x -> 28/08/2024 14:47:00
+  1x -> 14/01/2025 18:17:28
+  1x -> 15/12/2024 19:26:49
+  1x -> 15/09/2024 00:16:30
+  1x -> 27/09/2021 06:03:14
+
+telefone
+  1x -> 98949818749
+  1x -> 4447690438
+  1x -> 92948250360
+  1x -> 91936445607
+  1x -> 94916740197
+  1x -> 97957212267
+  1x -> 95947276912
+  1x -> 98982287061
+  1x -> 98912059919
+  1x -> 91940885967
+
+──────────────────────────────────────────────────────────────────────
+7. DISTRIBUIÇÃO DE LINHAS
+──────────────────────────────────────────────────────────────────────
+log_entry: 9538
+csv_row: 5001
+chat_message: 2606
+contact_line: 1110
+access_line: 1092
+client_line: 1072
+outros: 396
+blank: 346
+
+──────────────────────────────────────────────────────────────────────
+PROCESSAMENTO FINALIZADO COM SUCESSO
+──────────────────────────────────────────────────────────────────────
