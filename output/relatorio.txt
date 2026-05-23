@@ -5,6 +5,12 @@
 ────────────────────────────────────────────────────────────
 1. ARQUIVOS PROCESSADOS
 ────────────────────────────────────────────────────────────
+  Arquivo : 01_atendimentos_bagunçados.txt
+  Tipo    : texto_livre
+  Linhas  : 4921
+  Encoding: utf-8
+  Amostra : CHAMADO 00000 >>> falhou id erro contato de Daniela Oliveira email=bitbh@gov.br 
+
   Arquivo : 02_logs_mistos.log
   Tipo    : log
   Linhas  : 8000
@@ -26,26 +32,27 @@
 ────────────────────────────────────────────────────────────
 2. ESTATÍSTICAS GERAIS
 ────────────────────────────────────────────────────────────
-  Total de ocorrências: 119164
+  Total de ocorrências: 370189
 
   TIPO                   TOTAL   VÁLIDOS  INVÁLIDOS
   -------------------- ------- --------- ----------
-  cpf                     8611      7012       1599
-  data                   20602     20602          0
-  datetime               20602     20602          0
-  email                  12203      7296       4907
-  horario                20602     20602          0
-  nome_proprio           15877     15877          0
-  telefone               11709     10005       1704
-  url                     1891      1457        434
-  valor_monetario         7067      7067          0
+  cpf                     9496      7766       1730
+  data                   22473     22473          0
+  datetime               22473     22473          0
+  email                  14662     13207       1455
+  horario                22473     22473          0
+  nome_proprio           19324     14642       4682
+  telefone               13570     11564       2006
+  url                    18964     11748       7216
+  valor_monetario       226754      7987     218767
 
 ────────────────────────────────────────────────────────────
 3. DISTRIBUIÇÃO POR ARQUIVO
 ────────────────────────────────────────────────────────────
-  02_logs_mistos.log                           : 56650 ocorrências
-  03_mensagens_chat.txt                        : 24060 ocorrências
-  04_exportacao_suja.csv                       : 38454 ocorrências
+  01_atendimentos_bagunçados.txt               : 43692 ocorrências
+  02_logs_mistos.log                           : 164513 ocorrências
+  03_mensagens_chat.txt                        : 60785 ocorrências
+  04_exportacao_suja.csv                       : 101199 ocorrências
 
 ────────────────────────────────────────────────────────────
 FIM DO RELATÓRIO

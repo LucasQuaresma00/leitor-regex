@@ -18,6 +18,8 @@ def ler_arquivo(caminho: str) -> dict:
     linhas = []
 
     for enc in ("utf-8", "latin-1"):
+        # Nota [Melhoria]: Poderiamos ter usado rstrip para melhorar o
+        # desempenho
         try:
             with open(caminho, "r", encoding=enc, errors="replace") as f:
                 linhas = [l.rstrip("\n") for l in f.readlines()]
@@ -26,6 +28,8 @@ def ler_arquivo(caminho: str) -> dict:
         except Exception:
             encoding = "desconhecido"
 
+    #Pega até 5 linhas válidas (sem espaços vazios) para criar 
+    # uma amostra e identificar o tipo de arquivo por amostragem.
     tipo = _detectar_tipo(nome, linhas)
     amostra = [l for l in linhas if l.strip()][:5]
 
@@ -59,7 +63,15 @@ def _detectar_tipo(nome: str, linhas: list[str]) -> str:
     score_chat = sum(1 for l in amostra if re.search(r'^\[\d{2}/\d{2}/\d{4}\s\d{2}:\d{2}', l))
     score_csv  = sum(1 for l in amostra if l.count(';') >= 2 or l.count(',') >= 2)
 
-    if score_csv  / total >= 0.4: return "csv"
-    if score_chat / total >= 0.2: return "chat"
+    """
+    ANÁLISE DE RESULTADOS E CRITÉRIOS DE DECISÃO:
+    - O 'total' recebe 'or 1' para evitar erros de divisão por zero caso a amostra esteja vazia.
+    - Regex Log: Identifica tags [INFO/WARN...] ou data ISO (Ex: 2026-05-23T). Exige 20% de acerto.
+    - Regex Chat: Identifica início de linha (^) com data/hora em colchetes (Ex: [23/05/2026 14:30). Exige 20%.
+    - Contagem CSV: Verifica se há pelo menos dois delimitadores (, ou ;) na linha. Exige 40%.
+    - Se nenhum padrão atingir a tolerância mínima, o arquivo é classificado como 'texto_livre'.
+    """
+    if score_csv  / total >= 0.4: return "csv"  #40% é csv
+    if score_chat / total >= 0.2: return "chat" #20% chat e log
     if score_log  / total >= 0.2: return "log"
     return "texto_livre"

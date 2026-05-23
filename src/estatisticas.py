@@ -10,7 +10,9 @@ Produz:
 
 from collections import defaultdict
 
-
+# Definição de entrada e saida da funcao para fins de lembranca
+# loop obtido O(n)
+# Nota[Melhoria] possivel melhoria estatisticas por arquivo futura
 def calcular(ocorrencias: list[dict]) -> dict:
     """Calcula estatísticas sobre as ocorrências extraídas."""
     por_tipo     = defaultdict(int)

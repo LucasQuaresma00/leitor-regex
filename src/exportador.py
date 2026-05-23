@@ -11,6 +11,8 @@ import csv
 
 
 def exportar_json(ocorrencias: list[dict], output_dir: str) -> str:
+    """Exporta ocorrências para arquivo JSON."""
+
     caminho = os.path.join(output_dir, "resultados.json")
     with open(caminho, "w", encoding="utf-8") as f:
         json.dump(ocorrencias, f, ensure_ascii=False, indent=2)
@@ -18,8 +20,11 @@ def exportar_json(ocorrencias: list[dict], output_dir: str) -> str:
 
 
 def exportar_csv(ocorrencias: list[dict], output_dir: str) -> str:
+    """Exporta ocorrências para arquivo CSV."""
+    
     caminho = os.path.join(output_dir, "resultados.csv")
     campos = ["tipo", "valor", "arquivo", "classificacao", "status_final", "confianca"]
+    # Gera CSV separado por ';'
     with open(caminho, "w", encoding="utf-8", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=campos, delimiter=";", extrasaction="ignore")
         writer.writeheader()
@@ -28,6 +33,7 @@ def exportar_csv(ocorrencias: list[dict], output_dir: str) -> str:
 
 
 def exportar_relatorio(arquivos: list[dict], stats: dict, output_dir: str) -> str:
+    """Gera relatório TXT consolidado da análise."""
     caminho = os.path.join(output_dir, "relatorio.txt")
     sep = "─" * 60
 
