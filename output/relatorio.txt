@@ -32,7 +32,7 @@
 ────────────────────────────────────────────────────────────
 2. ESTATÍSTICAS GERAIS
 ────────────────────────────────────────────────────────────
-  Total de ocorrências: 370189
+  Total de ocorrências: 143435
 
   TIPO                   TOTAL   VÁLIDOS  INVÁLIDOS
   -------------------- ------- --------- ----------
@@ -44,15 +44,14 @@
   nome_proprio           19324     14642       4682
   telefone               13570     11564       2006
   url                    18964     11748       7216
-  valor_monetario       226754      7987     218767
 
 ────────────────────────────────────────────────────────────
 3. DISTRIBUIÇÃO POR ARQUIVO
 ────────────────────────────────────────────────────────────
-  01_atendimentos_bagunçados.txt               : 43692 ocorrências
-  02_logs_mistos.log                           : 164513 ocorrências
-  03_mensagens_chat.txt                        : 60785 ocorrências
-  04_exportacao_suja.csv                       : 101199 ocorrências
+  01_atendimentos_bagunçados.txt               : 17646 ocorrências
+  02_logs_mistos.log                           : 61911 ocorrências
+  03_mensagens_chat.txt                        : 25450 ocorrências
+  04_exportacao_suja.csv                       : 38428 ocorrências
 
 ────────────────────────────────────────────────────────────
 FIM DO RELATÓRIO

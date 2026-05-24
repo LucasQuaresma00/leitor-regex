@@ -57,8 +57,10 @@ EXTRACAO = {
     ),
     # Valor Monetário Geral: Captura números com formato de preço, com ou
     #  sem símbolos de moeda (R$, U$, $).
+    
     "valor_monetario": re.compile(
-        r'(?:R\$|U\$|\$)?\s?\d+[\d.,]*\b',
+        r'^R\$\s?\d{1,3}(?:\.\d{3})*(?:,\d{2})?$'
+        #r'(?:R\$|U\$|\$)?\s?\d+[\d.,]*\b', #aqui para gerar o maximo possivel de arquivos invalidos para validar
     ),
     # Nome Próprio Geral: Captura sequências de palavras iniciadas por 
     # maiúsculas, aceitando nomes únicos ou com conectores (de, da).
