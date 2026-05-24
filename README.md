@@ -1,6 +1,7 @@
 # Analisador de Padrões Regex
 
 Sistema de extração, classificação e visualização de padrões em texto via expressões regulares. Desenvolvido como trabalho acadêmico, atendendo os requisitos de leitura de arquivos, extração com regex, classificação válido/inválido, organização dos dados e análise quantitativa.
+🌐 Acesse a versão online do dashboard via GitHub Pages: https://lucasquaresma00.github.io/leitor-regex/frontend/
 
 ---
 
